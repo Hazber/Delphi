@@ -1,0 +1,129 @@
+Program FloppyDisk1;
+{Программа подсчитывает сумму дискет, купленных по отдельности, после подсчитывает количество ящиков, коробок, дискет, которые можно купить с учетом начального количества дискет, а также "выгодности" в их приобретении. Подсчет количества бонусных дискет. Подсчёт количества сэкономленных денег. Вывод полученных значений}
+
+//Консольное приложение
+{$APPTYPE CONSOLE}
+
+//Вызов системного модуля
+uses
+  SysUtils;
+
+//Объявление вещественных констант
+Const
+  floppycost :real = 11.5;  // floppycost-цена дискеты
+  costofboxes :real = 114.5;// costofboxes-цена коробки
+  costofchest:real = 1255;  // costofchest-цена ящика
+
+Var
+  ns:string;
+  N,Boxe,Chest,k,n1:Integer;
+  FirstSt,SecondSt,e:real;
+//ns-количество дискет, введенных как строка,
+//boxe-количество ящиков, chest- количество ящиков 
+//n-количество дискет,k-метка для проверки
+//перевода строки в число,n1-количество
+//дискет, FirstSt-стоимость дискет
+//SecondSt-выгодная стоимость2, e-выгодная стоимость1
+
+Begin
+
+//Ввод числа 
+//Проверка ввода числа
+  Write('Enter the NATURAL number of the floppy disk: ');
+  Readln(ns);
+  Val(ns,n,k);
+  while (k<>0) or (n<=0) do
+   begin
+     Val(ns,n,k);
+     if (k<>0) or (n<=0) then
+       begin
+         Writeln('Incorrect input');
+         Writeln('Try again');
+         Writeln('Enter the NATURAL POSITIVE number of the floppy disk: ');
+         Readln(ns);
+       end
+     else
+       k:=0;
+   end;
+
+//Вычисление стоимости дискет,
+//купленных по отдельности
+//вывод полученных значений
+   FirstSt:=N*floppycost;                                                            
+   WriteLn('1)When buying floppies separately, their cost will be: ' +
+   Floattostr(FirstSt) + ' rub');
+   WriteLn;
+
+//Вычисление количества коробок, ящиков, 
+//оставшихся дискет
+//вычисление полной стоимости, купленных ящиков, 
+//дискет, коробок
+//сохранение количества дискет
+   n1:=n;
+   Chest := N div 144;                 
+   N:= N mod 144;                      
+   boxe:= N div 12;                    
+   N:= N mod 12;         
+   e:=floppycost*N+costofboxes*boxe+costofchest*chest;
+
+//Вывод количества приобретенных товаров
+//и стоимости приобретенных товаров
+   Writeln('2)We can bought:');  
+   Writeln('  Chest - ' + inttostr(chest));
+   Writeln('  Boxe - ' + inttostr(boxe));
+   Writeln('  Floppy disk - ' + inttostr(N));
+   Writeln('----------------');
+   Writeln('Cost: '+floattostr(e)+' rub ');
+   WriteLn;
+
+//Если выгодно купить коробку, покупка коробки,
+//вместо дискет
+   if N*floppycost >= costofboxes then 
+   begin
+     N:=0;
+     boxe:=boxe+1;
+    end;
+
+
+ //Если выгодно купить ящик, покупка ящика,
+ //вместо дискет и коробок
+  if boxe*costofboxes >= costofchest then //Если выгодно купить ящик и получить коробку в подарок
+    begin
+      boxe:=0;
+      N:=0;
+      chest:=chest+1;
+    end;
+
+//Подсчет наивыгоднейшего варианта
+//Если вторая сумма меньше первой, то вывод полученных
+//значений
+//Подсчет бонусных дискет
+SecondSt:=floppycost*N+costofboxes*boxe+costofchest*chest;
+if e>secondst then
+     begin
+       Writeln('For most economy you can bought: ');                                     
+       Writeln('  Chest - ' + inttostr(chest));
+       Writeln('  Boxe - ' + inttostr(boxe));
+       Writeln('  Floppy disk - ' + inttostr(N));
+       Writeln('----------------');
+       Writeln('3)Cost: '+ floattostr(SecondSt)+' rub');
+       WriteLn;
+       Writeln('And you have ',abs(n1-   (boxe*12+(chest*12*12))),' floppy disk as bonus');
+     end
+   else writeln ('3)No other variants ');
+     Writeln;
+     Writeln('When using the most advantageous option, you will save: ' + floattostr(FirstSt-SecondSt) + ' rub');
+
+     Readln;
+  
+
+End.
+
+
+
+
+
+
+
+
+
