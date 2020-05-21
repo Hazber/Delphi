@@ -1,0 +1,21 @@
+Writeln('1) (A+B):');
+  Sum(A,B,n,C);
+  OutPut(n,C);
+  Writeln('2) A*(A+B):');
+  MulMatr(A,C,n,D);
+  OutPut(n,D);
+  Writeln('3) 2*A*(A+B)');
+  MulMatrAndNumb(D,n,2,C);
+  OutPut(n,C);
+  Writeln('4) A*B:');
+  MulMatr(A,B,n,D);
+  OutPut(n,D);
+  Writeln('5) A*B*3:');
+  MulMatrAndNumb(D,n,3,D);
+  OutPut(n,D);
+  Writeln('6) The final result:');
+  Writeln('   2*A*(A+B)-3*A*B =');
+  Minus(C,D,n,C);
+  OutPut(n,C);
+
+  Readln;

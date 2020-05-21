@@ -1,0 +1,62 @@
+procedure MulMatr(Matr1,Matr2:tmatrix;size:Integer;var
+                 ResMatr:tmatrix);
+var
+  i,j,m:integer;
+begin
+  for i:=1 to size do
+    for j:=1 to size do
+    begin
+      ResMatr[i,j]:=0;
+      for m:=1 to size do
+        ResMatr[i,j]:=ResMatr[i,j]+Matr1[i,m]*Matr2[m,j];         
+    end;
+end;
+
+//Matrix addition
+procedure Sum(Matr1,Matr2:tmatrix;size:Integer;var
+              ResMatr:tmatrix);
+var
+  i,j:integer;
+begin
+  for i:=1 to size do
+    for j:=1 to size do
+      ResMatr[i,j]:=Matr1[i,j]+Matr2[i,j];
+end;
+
+//Matrix minus
+procedure minus(Matr1,Matr2:tmatrix;size:Integer;var
+                ResMatr:tmatrix);
+var
+  i,j:integer;
+begin
+  for i:=1 to size do
+    for j:=1 to size do
+      ResMatr[i,j]:=Matr1[i,j]-Matr2[i,j];
+end;
+
+//Matrix and number multiplication
+procedure MulMatrAndNumb(Matr:tmatrix;size,
+                         number:Integer;var
+                         ResMatr:tmatrix);
+var
+  i,j:integer;
+begin
+  for i:=1 to size do
+    for j:=1 to size do
+      ResMatr[i,j]:=Matr[i,j]*number;
+end;
+
+//Matrix output
+procedure OutPut(size:Integer;Matr:tmatrix);
+var
+  i,j:integer;
+begin
+  for i:=1 to size do
+  begin
+    for j:=1 to size do
+      write(Matr[i,j]:4,'|');
+      Writeln;
+  end;
+  writeln('====================================');
+
+end;

@@ -1,0 +1,129 @@
+Program laba8;
+{
+  Во входном файле записано без ошибок логическое
+  выражение след.вида:
+<Логич_выражение>::=True|False|(<Операция>(<Операнды>))
+  <Операция> ::= Not|And|Or
+  <Операнды>::=<Операнд>[,<Операнд>]
+  <Операнд>::=<Логич_выражение>
+  Ввести выражение и вычислить его значение.
+*Например, результатом выражения Not(False) будет True.
+}
+
+//консольное приложение
+{$APPTYPE CONSOLE}
+
+//подключение модуля(библиотеки)
+uses
+  SysUtils;
+
+//объявление констант
+Const
+  AllSymb = ['N','O','A','T','F'];
+
+//объявление переменных
+var
+  Expr:TextFile;
+  myExpr:string;
+{
+  Expr - файл, в котором написано выражение
+  myExpr - строка, в которой записано выражение
+}
+
+//подсчет выражения
+function CalcLog(var myExpr:string; i:integer):boolean;
+var
+  inter:boolean;
+begin
+  case myExpr[i] of
+    'T':
+    begin
+      Result:=True;
+      if myExpr[i+1] = ',' then
+        Delete(myExpr, i, 2)
+      else
+        Delete(myExpr, i, 1);
+    end;
+    'F':
+    begin
+      Result:=False;
+      if myExpr[i+1] = ',' then
+        Delete(myExpr, i, 2)
+      else
+        Delete(myExpr, i, 1);
+    end;
+    'N':
+    begin
+      Result:=Not(CalcLog(myExpr, i+2));
+      if myExpr[i+3] = ',' then
+        Delete(myExpr, i, 4)
+      else
+        Delete(myExpr, i, 3);
+    end;
+    'O':
+    begin
+      Result:=CalcLog(myExpr,i+2);
+      repeat
+        inter:=CalcLog(myExpr,i+2);
+        Result:=Result or inter;
+      until not (myExpr[i+2] in AllSymb);
+      if myExpr[i+3] = ',' then
+        Delete(myExpr, i, 4)
+      else
+        Delete(myExpr, i, 3);
+    end;
+    'A':
+    begin
+      Result:=CalcLog(myExpr,i+2);
+      repeat
+        inter:=CalcLog(myExpr,i+2);
+        Result:=Result and inter;
+      until not (myExpr[i+2] in AllSymb);
+      if myExpr[i+3] = ',' then
+        Delete(myExpr, i, 4)
+      else
+        Delete(myExpr, i, 3);
+    end;
+  end;
+end;
+
+//преобразование выражения в строку
+procedure FileToStr(var MyFile:TextFile; var 
+                    myExpr:String);
+var
+  mylet:char;
+begin
+  myExpr:='';
+  ReSet(MyFile);
+  while not (EOF(MyFile)) do
+  begin
+    Read(MyFile, mylet);
+    myExpr:=myExpr+mylet;   
+  end;
+  Close(MyFile);
+  writeln(myExpr);
+  myExpr:=StringReplace(myExpr, 'False', 'F',
+                        [rfReplaceAll, rfIgnoreCase]);
+  myExpr:=StringReplace(myExpr, 'True', 'T',
+                        [rfReplaceAll, rfIgnoreCase]);
+  myExpr:=StringReplace(myExpr, 'Not', 'N',
+                        [rfReplaceAll, rfIgnoreCase]);
+  myExpr:=StringReplace(myExpr, 'And', 'A',
+                        [rfReplaceAll, rfIgnoreCase]);
+  myExpr:=StringReplace(myExpr, 'Or', 'O',
+                        [rfReplaceAll, rfIgnoreCase]);
+end;
+
+Begin
+  //подготовка файла к чтению
+  AssignFile(Expr, 'LogExpr.txt');
+
+  //преобразование файла в строку
+  FileToStr(Expr,myExpr);
+
+  //подсчет и вывод результата
+  writeln('Result = ',CalcLog(myExpr, 1));
+  writeln('Press "Enter" to exit...');
+  readln;
+End.
+

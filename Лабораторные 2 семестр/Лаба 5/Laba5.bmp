@@ -1,0 +1,116 @@
+Program Project2;
+//The program calculate 2*A*(A+B)-3*A*B
+
+//Console app
+{$APPTYPE CONSOLE}
+
+//Uses modules
+uses
+SysUtils;
+
+//Constant part
+const
+  n=3;//size of the matrix
+
+//Type part
+type
+  TMatrix=array[1..n,1..n] of Integer;  //Matrix type
+
+//Variable declaration
+var
+  C,D:tMatrix;          //result matrix
+  A:TMatrix=((2,3,4),   //given matrix
+            (1,-2,0),
+            (0,1,2));
+  B:TMatrix=((2,3,-2),
+            (1,1,0),
+            (1,-1,1));
+
+//Matrix multiplication
+procedure MulMatr(Matr1,Matr2:tmatrix;size:Integer;var
+                 ResMatr:tmatrix);
+var
+  i,j,m:integer;
+begin
+  for i:=1 to size do
+    for j:=1 to size do
+    begin
+      ResMatr[i,j]:=0;
+      for m:=1 to size do
+        ResMatr[i,j]:=ResMatr[i,j]+Matr1[i,m]*Matr2[m,j];         
+    end;
+end;
+
+//Matrix addition
+procedure Sum(Matr1,Matr2:tmatrix;size:Integer;var
+              ResMatr:tmatrix);
+var
+  i,j:integer;
+begin
+  for i:=1 to size do
+    for j:=1 to size do
+      ResMatr[i,j]:=Matr1[i,j]+Matr2[i,j];
+end;
+
+//Matrix minus
+procedure minus(Matr1,Matr2:tmatrix;size:Integer;var
+                ResMatr:tmatrix);
+var
+  i,j:integer;
+begin
+  for i:=1 to size do
+    for j:=1 to size do
+      ResMatr[i,j]:=Matr1[i,j]-Matr2[i,j];
+end;
+
+//Matrix and number multiplication
+procedure MulMatrAndNumb(Matr:tmatrix;size,
+                         number:Integer;var
+                         ResMatr:tmatrix);
+var
+  i,j:integer;
+begin
+  for i:=1 to size do
+    for j:=1 to size do
+      ResMatr[i,j]:=Matr[i,j]*number;
+end;
+
+//Matrix output
+procedure OutPut(size:Integer;Matr:tmatrix);
+var
+  i,j:integer;
+begin
+  for i:=1 to size do
+  begin
+    for j:=1 to size do
+      write(Matr[i,j]:4,'|');
+      Writeln;
+  end;
+  writeln('====================================');
+
+end;
+
+Begin
+
+  Writeln('1) (A+B):');
+  Sum(A,B,n,C);
+  OutPut(n,C);
+  Writeln('2) A*(A+B):');
+  MulMatr(A,C,n,D);
+  OutPut(n,D);
+  Writeln('3) 2*A*(A+B)');
+  MulMatrAndNumb(D,n,2,C);
+  OutPut(n,C);
+  Writeln('4) A*B:');
+  MulMatr(A,B,n,D);
+  OutPut(n,D);
+  Writeln('5) A*B*3:');
+  MulMatrAndNumb(D,n,3,D);
+  OutPut(n,D);
+  Writeln('6) The final result:');
+  Writeln('   2*A*(A+B)-3*A*B =');
+  Minus(C,D,n,C);
+  OutPut(n,C);
+
+  Readln;
+End.
